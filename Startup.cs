@@ -1,8 +1,11 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using RestrauntServer.Data;
+using RestrauntServer.Services;
 
 namespace RestrauntServer
 {
@@ -19,6 +22,17 @@ namespace RestrauntServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<RestrauntDb>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("RestrauntDb")));
+
+            services.AddScoped<MenuService>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "MyTestService", Version = "v1", });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,11 +43,16 @@ namespace RestrauntServer
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sample API");
+            });
 
             app.UseEndpoints(endpoints =>
             {
