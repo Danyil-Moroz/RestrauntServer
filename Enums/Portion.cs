@@ -2,7 +2,7 @@
 {
     public enum  Portion
     {
-        Weight,
+        Weight =1,
         Count
     }
 }

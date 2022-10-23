@@ -9,7 +9,7 @@ namespace RestrauntServer.Data
         public DbSet<Dish> Dish { get; set; }
         public DbSet<Client> Client { get; set; }
         public DbSet<Order> Order { get; set; }
-        public DbSet<DishPunkt> DDishPunktish { get; set; }
+        public DbSet<DishPunkt> DishPunkts{ get; set; }
 
         public RestrauntDb (DbContextOptions<RestrauntDb> options)
             : base(options)
@@ -19,7 +19,7 @@ namespace RestrauntServer.Data
         protected override void OnModelCreating(ModelBuilder model)
         {
             model.Entity<DishPunkt>()
-                .HasOne<Dish>()
+                .HasOne(x=>x.Dish)
                 .WithMany(x => x.dishPunkts)
                 .HasForeignKey(x => x.DishId)
                 .IsRequired(true);

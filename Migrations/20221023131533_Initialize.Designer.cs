@@ -10,8 +10,8 @@ using RestrauntServer.Data;
 namespace RestrauntServer.Migrations
 {
     [DbContext(typeof(RestrauntDb))]
-    [Migration("20221021185107_InitializationDb")]
-    partial class InitializationDb
+    [Migration("20221023131533_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,7 +106,7 @@ namespace RestrauntServer.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("DDishPunktish");
+                    b.ToTable("DishPunkts");
                 });
 
             modelBuilder.Entity("RestrauntServer.Models.Order", b =>
@@ -146,7 +146,7 @@ namespace RestrauntServer.Migrations
 
             modelBuilder.Entity("RestrauntServer.Models.DishPunkt", b =>
                 {
-                    b.HasOne("RestrauntServer.Models.Dish", null)
+                    b.HasOne("RestrauntServer.Models.Dish", "Dish")
                         .WithMany("dishPunkts")
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)

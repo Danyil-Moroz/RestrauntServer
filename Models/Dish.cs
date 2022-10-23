@@ -3,6 +3,8 @@
     using RestrauntServer.Enums;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Runtime.Serialization;
+    using System.Text.Json.Serialization;
 
     public class Dish : BaseModel
     {
@@ -19,6 +21,9 @@
         public int Rating { get; set; }
 
         public int OrderedCount { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IList<DishPunkt> dishPunkts { get; set; }
 
         public Dish()

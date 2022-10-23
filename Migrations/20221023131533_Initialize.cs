@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RestrauntServer.Migrations
 {
-    public partial class InitializationDb : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -69,7 +69,7 @@ namespace RestrauntServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DishPunkt",
+                name: "DishPunkts",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -81,15 +81,15 @@ namespace RestrauntServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DishPunkt", x => x.Id);
+                    table.PrimaryKey("PK_DishPunkts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DishPunkt_Dish_DishId",
+                        name: "FK_DishPunkts_Dish_DishId",
                         column: x => x.DishId,
                         principalTable: "Dish",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DishPunkt_Order_OrderId",
+                        name: "FK_DishPunkts_Order_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Order",
                         principalColumn: "Id",
@@ -97,13 +97,13 @@ namespace RestrauntServer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DishPunkt_DishId",
-                table: "DishPunkt",
+                name: "IX_DishPunkts_DishId",
+                table: "DishPunkts",
                 column: "DishId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DishPunkt_OrderId",
-                table: "DishPunkt",
+                name: "IX_DishPunkts_OrderId",
+                table: "DishPunkts",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
@@ -115,7 +115,7 @@ namespace RestrauntServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DishPunkt");
+                name: "DishPunkts");
 
             migrationBuilder.DropTable(
                 name: "Dish");

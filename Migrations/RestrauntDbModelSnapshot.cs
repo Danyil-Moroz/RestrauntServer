@@ -104,7 +104,7 @@ namespace RestrauntServer.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("DDishPunktish");
+                    b.ToTable("DishPunkts");
                 });
 
             modelBuilder.Entity("RestrauntServer.Models.Order", b =>
@@ -144,7 +144,7 @@ namespace RestrauntServer.Migrations
 
             modelBuilder.Entity("RestrauntServer.Models.DishPunkt", b =>
                 {
-                    b.HasOne("RestrauntServer.Models.Dish", null)
+                    b.HasOne("RestrauntServer.Models.Dish", "Dish")
                         .WithMany("dishPunkts")
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -3,7 +3,6 @@
     using RestrauntServer.Enums;
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
 
     public class Order : BaseModel 
     {
@@ -21,7 +20,7 @@
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
-        public IList<DishPunkt> dishPunkts { get; set; }
+        public virtual IList<DishPunkt> dishPunkts { get; set; }
 
         public Order()
         {

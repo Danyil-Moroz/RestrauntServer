@@ -27,6 +27,7 @@ namespace RestrauntServer
                     options.UseSqlServer(Configuration.GetConnectionString("RestrauntDb")));
 
             services.AddScoped<MenuService>();
+            services.AddScoped<ClientORderService>();
 
             services.AddSwaggerGen(c =>
             {
