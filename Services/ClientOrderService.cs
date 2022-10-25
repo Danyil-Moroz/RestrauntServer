@@ -18,7 +18,7 @@
 
         public async Task<IEnumerable<Order>> GetAllOrdersForUser(int id)
         {
-            return await _dbContext.Order.Where(x=>x.Id == id).Include(x=>x.dishPunkts).ThenInclude(x=>x.Dish).ToListAsync();
+            return await _dbContext.Order.Where(x=>x.ClientId == id).Include(x=>x.dishPunkts).ThenInclude(x=>x.Dish).ToListAsync();
         }
 
         public async Task<Order> GetOrderDetails(int id)
@@ -28,46 +28,39 @@
 
         public async  Task CreateOrder(Order order)
         {
-            var item = new Order()
+            if (order.dishPunkts != null || order.dishPunkts.Count!=0)
             {
-                Status = Enums.Status.Created,
-                CreatedDate = System.DateTime.Now,
-                ClientId = order.ClientId,
-                Address = order.Address,
-                DeliveryDate = order.DeliveryDate,
-                IsDelivery = order.IsDelivery,
-                TableNumber = order.TableNumber
-            };
-            await _dbContext.Order.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
-            var result = await _dbContext.Order.ToListAsync();
-            var newOrderid = result.Last().Id;
-            foreach (var dishItem in order.dishPunkts)
-            {
-                var dishPunkt = new DishPunkt()
+                var item = new Order()
                 {
-                    OrderId = newOrderid,
-                    DishCount = dishItem.DishCount,
-                    UsersNotes = dishItem.UsersNotes,
-                    DishId = dishItem.DishId
+                    Status = Enums.Status.Created,
+                    CreatedDate = System.DateTime.Now,
+                    ClientId = order.ClientId,
+                    Address = order.Address,
+                    DeliveryDate = order.DeliveryDate,
+                    IsDelivery = order.IsDelivery,
+                    TableNumber = order.TableNumber
                 };
-                await _dbContext.DishPunkts.AddAsync(dishPunkt);
+                await _dbContext.Order.AddAsync(item);
                 await _dbContext.SaveChangesAsync();
+                var result = await _dbContext.Order.ToListAsync();
+                var newOrderid = result.Last().Id;
+                foreach (var dishItem in order.dishPunkts)
+                {
+                    var dishPunkt = new DishPunkt()
+                    {
+                        OrderId = newOrderid,
+                        DishCount = dishItem.DishCount,
+                        UsersNotes = dishItem.UsersNotes,
+                        DishId = dishItem.DishId
+                    };
+                    var dish = await _dbContext.Dish.FindAsync(dishItem.DishId);
+                    dish.OrderedCount += dishItem.DishCount;
+                    _dbContext.Entry<Dish>(dish).State = EntityState.Modified;
+                    await _dbContext.DishPunkts.AddAsync(dishPunkt);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
+           
         }
-
-        //public async Task<int> UpdateOrder (Order item, int id)
-        //{
-        //    var order = await _dbContext.FindAsync<Order>(id);
-
-        //    order.IsDelivery = item.IsDelivery;
-        //    order.Status = item.Status;
-        //    order.Address = item.Address;
-        //    order.ClientId = item.ClientId;
-        //    order.CreatedDate = item.CreatedDate;
-        //    order.DeliveryDate = item.DeliveryDate;
-        //    order.TableNumber = item.TableNumber;
-            
-        //}
     }
 }

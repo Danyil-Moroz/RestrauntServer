@@ -6,6 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using RestrauntServer.Data;
 using RestrauntServer.Services;
+using Microsoft.AspNetCore.Authentication.Certificate;
+using System.Security.Cryptography.X509Certificates;
+using System;
 
 namespace RestrauntServer
 {
@@ -25,8 +28,39 @@ namespace RestrauntServer
 
             services.AddDbContext<RestrauntDb>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("RestrauntDb")));
+            services.AddAuthentication(
+        CertificateAuthenticationDefaults.AuthenticationScheme)
+    .AddCertificate();
+            services.AddCertificateForwarding(options =>
+             {
+                 options.CertificateHeader = "X-SSL-CERT";
 
-            services.AddScoped<MenuService>();
+                 options.HeaderConverter = headerValue =>
+                 {
+                     X509Certificate2? clientCertificate = null;
+
+                     if (!string.IsNullOrWhiteSpace(headerValue))
+                     {
+                         clientCertificate = new X509Certificate2(StringToByteArray(headerValue));
+                     }
+
+                     return clientCertificate!;
+
+                     static byte[] StringToByteArray(string hex)
+                     {
+                         var numberChars = hex.Length;
+                         var bytes = new byte[numberChars / 2];
+
+                         for (int i = 0; i < numberChars; i += 2)
+                         {
+                             bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+                         }
+
+                         return bytes;
+                     }
+                 };
+             });
+                 services.AddScoped<MenuService>();
             services.AddScoped<ClientORderService>();
 
             services.AddSwaggerGen(c =>
@@ -45,9 +79,9 @@ namespace RestrauntServer
             }
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseCertificateForwarding();
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c =>

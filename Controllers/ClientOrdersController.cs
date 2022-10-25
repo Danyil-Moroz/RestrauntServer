@@ -55,12 +55,20 @@
         public async Task<IActionResult> Create([FromBody] Order order)
         {
             var result = new ContentResult();
-            if (ModelState.IsValid)
+            try
             {
-                await _service.CreateOrder(order);
-                result.StatusCode = Response.StatusCode = StatusCodes.Status200OK;
+                if (order != null)
+                {
+                    await _service.CreateOrder(order);
+                    result.StatusCode = Response.StatusCode = StatusCodes.Status200OK;
+                }
+                else
+                {
+                    result.StatusCode = Response.StatusCode = StatusCodes.Status400BadRequest;
+                }
             }
-            else{
+            catch (Exception)
+            {
                 result.StatusCode = Response.StatusCode = StatusCodes.Status400BadRequest;
             }
            
