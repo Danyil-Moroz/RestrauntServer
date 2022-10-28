@@ -21,9 +21,9 @@
             return await _dbContext.Order.Where(x=>x.ClientId == id).Include(x=>x.dishPunkts).ThenInclude(x=>x.Dish).ToListAsync();
         }
 
-        public async Task<Order> GetOrderDetails(int id)
+        public async Task<Order> GetOrderDetails(int clientId, int id)
         {
-            return await _dbContext.Order.Include(x => x.dishPunkts).ThenInclude(x => x.Dish).Where(x=>x.Id==id).FirstOrDefaultAsync();
+            return await _dbContext.Order.Include(x => x.dishPunkts).ThenInclude(x => x.Dish).Where(x=>x.Id==id && x.ClientId == clientId).FirstOrDefaultAsync();
         }
 
         public async  Task CreateOrder(Order order)

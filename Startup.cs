@@ -62,7 +62,7 @@ namespace RestrauntServer
              });
                  services.AddScoped<MenuService>();
             services.AddScoped<ClientORderService>();
-
+            services.AddScoped<CleintAccountService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "MyTestService", Version = "v1", });

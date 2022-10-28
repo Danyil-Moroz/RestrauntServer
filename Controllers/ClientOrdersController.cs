@@ -41,9 +41,9 @@
        
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int clientId , int id)
         {
-            var result = JsonHelper.ConvertToJsonString(await _service.GetOrderDetails(id));
+            var result = JsonHelper.ConvertToJsonString(await _service.GetOrderDetails(clientId,id));
             if (string.IsNullOrWhiteSpace(result.Content))
             {
                 Response.StatusCode = StatusCodes.Status204NoContent;
