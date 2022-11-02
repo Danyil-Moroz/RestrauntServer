@@ -1,4 +1,6 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
+using RestrauntServer.Models;
+
 namespace RestrauntServer.Data
 {
     using Microsoft.EntityFrameworkCore;
