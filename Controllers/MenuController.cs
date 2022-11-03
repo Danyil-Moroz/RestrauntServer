@@ -20,6 +20,7 @@ namespace RestrauntServer.Controllers
 
         [HttpGet]
         [Route("")]
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
         // GET: Menu
         public async Task<IActionResult> Index()
         {
@@ -34,6 +35,7 @@ namespace RestrauntServer.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
         public async Task<IActionResult> Details(int id)
         {
             var result = JsonHelper.ConvertToJsonString(await _menuService.GetDishDetails(id));
