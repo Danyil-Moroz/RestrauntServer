@@ -60,7 +60,7 @@ namespace RestrauntServer
                      }
                  };
              });
-                 services.AddScoped<MenuService>();
+            services.AddScoped<MenuService>();
             services.AddScoped<ClientORderService>();
             services.AddScoped<CleintAccountService>();
             services.AddScoped<AdminService>();

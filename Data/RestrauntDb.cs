@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RestrauntServer.Models;
-
-namespace RestrauntServer.Data
+﻿namespace RestrauntServer.Data
 {
     using Microsoft.EntityFrameworkCore;
     using RestrauntServer.Models;
@@ -12,6 +9,7 @@ namespace RestrauntServer.Data
         public DbSet<Client> Client { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<DishPunkt> DishPunkts{ get; set; }
+        public DbSet<Category> Category { get; set; }
 
         public RestrauntDb (DbContextOptions<RestrauntDb> options)
             : base(options)
@@ -37,7 +35,13 @@ namespace RestrauntServer.Data
                 .WithMany(x => x.orders)
                 .HasForeignKey(x => x.ClientId)
                 .IsRequired(true);
-            
+
+            model.Entity<Dish>()
+                .HasOne<Category>(x => x.Category)
+                .WithOne(x => x.Dish)
+                .HasForeignKey<Dish>(x => x.CategoryId)
+                .IsRequired(true);             
+
         }
        
     }

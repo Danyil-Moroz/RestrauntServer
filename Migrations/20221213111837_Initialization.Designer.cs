@@ -10,16 +10,34 @@ using RestrauntServer.Data;
 namespace RestrauntServer.Migrations
 {
     [DbContext(typeof(RestrauntDb))]
-    [Migration("20221023131533_Initialize")]
-    partial class Initialize
+    [Migration("20221213111837_Initialization")]
+    partial class Initialization
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.30")
+                .HasAnnotation("ProductVersion", "3.1.31")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("RestrauntServer.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
 
             modelBuilder.Entity("RestrauntServer.Models.Client", b =>
                 {
@@ -55,7 +73,13 @@ namespace RestrauntServer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("DishName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageURL")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ingredients")
@@ -77,6 +101,9 @@ namespace RestrauntServer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
 
                     b.ToTable("Dish");
                 });
@@ -142,6 +169,15 @@ namespace RestrauntServer.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("RestrauntServer.Models.Dish", b =>
+                {
+                    b.HasOne("RestrauntServer.Models.Category", "Category")
+                        .WithOne("Dish")
+                        .HasForeignKey("RestrauntServer.Models.Dish", "CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RestrauntServer.Models.DishPunkt", b =>

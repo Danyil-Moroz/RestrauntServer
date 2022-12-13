@@ -8,8 +8,13 @@
     public class Dish : BaseModel
     {
         public string DishName { get; set; }
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
 
         public double PricePerPortion { get; set; }
+
+        public string ImageURL { get; set; }
 
         public int Portion { get; set; }
 
@@ -28,6 +33,7 @@
         public Dish()
         {
             dishPunkts = new List<DishPunkt>();
+            Category = new Category();
         }
     }
 }

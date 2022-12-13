@@ -3,10 +3,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RestrauntServer.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class Initialization : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Category",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryName = table.Column<string>(nullable: true),
+                    ImageURL = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Category", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Client",
                 columns: table => new
@@ -31,7 +45,9 @@ namespace RestrauntServer.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DishName = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: false),
                     PricePerPortion = table.Column<double>(nullable: false),
+                    ImageURL = table.Column<string>(nullable: true),
                     Portion = table.Column<int>(nullable: false),
                     PortionVariant = table.Column<int>(nullable: false),
                     Ingredients = table.Column<string>(nullable: true),
@@ -41,6 +57,12 @@ namespace RestrauntServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dish", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Dish_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,6 +119,11 @@ namespace RestrauntServer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Dish_CategoryId",
+                table: "Dish",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DishPunkts_DishId",
                 table: "DishPunkts",
                 column: "DishId");
@@ -122,6 +149,9 @@ namespace RestrauntServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Order");
+
+            migrationBuilder.DropTable(
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "Client");

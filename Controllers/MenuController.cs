@@ -46,5 +46,20 @@ namespace RestrauntServer.Controllers
             return result;
         }
 
+        [HttpGet]
+        [Route("Categories")]
+        [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 60)]
+        // GET: Menu
+        public async Task<IActionResult> Categories()
+        {
+            var result = JsonHelper.ConvertToJsonString(await _menuService.GetCategories());
+
+            if (string.IsNullOrWhiteSpace(result.Content))
+            {
+                Response.StatusCode = StatusCodes.Status204NoContent;
+            }
+            return result;
+        }
+
     }
 }
